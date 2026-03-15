@@ -1,0 +1,28 @@
+{
+  "name": "genshin-resin-counter",
+  "version": "1.0.0",
+  "description": "GNOME shell extension for showing the current amount of resin from Genshin Impact game",
+  "type": "module",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resin-counter/resin-counter.git"
+  },
+  "author": "Serhii Cho <serhiicho@protonmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/resin-counter/resin-counter/issues"
+  },
+  "homepage": "https://github.com/resin-counter/resin-counter#readme",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@girs/gjs": "^4.0.0-beta.40",
+    "@girs/gnome-shell": "^49.1.0"
+  }
+}
