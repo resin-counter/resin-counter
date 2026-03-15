@@ -16,11 +16,21 @@ function notify(msg: string): void {
 }
 
 export default class ExampleExtension extends Extension {
-    private buttonText: St.Label | null = null
-    private button: PanelMenu.Button | null = null
-    private interval: GLib.Source | null = null
     private resin: number = 0
     private popup: PopupMenu.PopupMenu | null = null
+
+    // Main button text where your resin and icon is displayed. We update
+    // this field every x amount of minutes.
+    private buttonText: St.Label | null = null
+
+    // Main button with icon and resin counter in the top bar
+    private button: PanelMenu.Button | null = null
+
+    // Interval after which resin will be recalculated
+    private interval: GLib.Source | null = null
+
+    // Entry (input) where you enter your resin amount in popup menu
+    private entry: St.Entry | null = null
 
     public enable(): void {
         this.button = this.drawButton()
@@ -30,8 +40,7 @@ export default class ExampleExtension extends Extension {
 
         this.interval = setInterval(
             this.updateCounter.bind(this),
-            60000,
-            // RESIN_EVERY_MIN * 60 * 1000,
+            RESIN_EVERY_MIN * 60 * 1000,
         )
 
         Main.panel.addToStatusArea(this.uuid, this.button)
@@ -99,10 +108,12 @@ export default class ExampleExtension extends Extension {
 
         const popup = new PopupMenu.PopupMenu(this.button, 0.5, St.Side.TOP)
 
-        popup.addMenuItem(this.getInput())
+        popup.addMenuItem(this.drawEntryMenuItem())
 
         const section = new PopupMenu.PopupMenuSection()
-        section.addAction('Menu Item', () => notify('activated'))
+
+        section.addAction('Submit Resin', this.tryToSubmitResin.bind(this))
+
         popup.addMenuItem(section)
 
         this.button.setMenu(popup)
@@ -110,37 +121,49 @@ export default class ExampleExtension extends Extension {
         return popup
     }
 
-    private getInput(): PopupMenu.PopupBaseMenuItem {
-        const input = new PopupMenu.PopupBaseMenuItem()
-        const entry = new St.Entry({
-            hint_text: 'Enter resin (0-200)',
-            track_hover: true,
+    private drawEntryMenuItem(): PopupMenu.PopupBaseMenuItem {
+        const menuItem = new PopupMenu.PopupBaseMenuItem()
+
+        this.entry = new St.Entry({
+            hint_text: 'Your current resin',
+            track_hover: false,
             can_focus: true,
         })
 
-        entry.set_width(200)
-        input.add_child(entry)
+        menuItem.add_child(this.entry)
 
-        // Handle input changes
-        entry.clutter_text.connect('activate', () => {
-            if (!this.popup) {
-                throw new Error('Cannot get input because this.popup is null')
-            }
+        this.entry.get_text()
 
-            const value = parseInt(entry.get_text(), 10)
+        this.entry.clutter_text.connect('activate', this.tryToSubmitResin.bind(this))
 
-            if (isNaN(value) || value < 0 || value > 200) {
-                notify('Please enter a number between 0 and 200')
-                return
-            }
+        return menuItem
+    }
 
-            this.resin = value
-            this.redrawDisplayedResin()
-            this.popup.close()
+    private tryToSubmitResin(): void {
+        if (!this.entry) {
+            throw new Error('Cannot try to submit resin because this.entry is null')
+        }
 
-            notify(`Resin set to ${value}`)
-        })
+        const value = parseInt(this.entry.get_text(), 10)
 
-        return input
+        if (isNaN(value) || value < 0 || value > 200) {
+            notify('Please enter a number between 0 and 200')
+            return
+        }
+
+        this.resin = value
+        this.redrawDisplayedResin()
+
+        notify(`Resin set to ${value}`)
+
+        this.closePopup()
+    }
+
+    private closePopup(): void {
+        if (!this.popup) {
+            throw new Error('Cannot close popup this.popup is null')
+        }
+
+        this.popup.close()
     }
 }
