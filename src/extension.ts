@@ -108,21 +108,29 @@ export default class ExampleExtension extends Extension {
 
         const popup = new PopupMenu.PopupMenu(this.button, 0.5, St.Side.TOP)
 
+        popup.addMenuItem(this.drawLabelMenuItem())
         popup.addMenuItem(this.drawEntryMenuItem())
-
-        const section = new PopupMenu.PopupMenuSection()
-
-        section.addAction('Submit Resin', this.tryToSubmitResin.bind(this))
-
-        popup.addMenuItem(section)
 
         this.button.setMenu(popup)
 
         return popup
     }
 
+    private drawLabelMenuItem(): PopupMenu.PopupBaseMenuItem {
+        const labelItem = new PopupMenu.PopupBaseMenuItem({ reactive: false })
+
+        labelItem.add_child(
+            new St.Label({
+                text: 'Enter your current resin\namount in the field below\nand press Enter.',
+                x_align: Clutter.ActorAlign.START,
+            }),
+        )
+
+        return labelItem
+    }
+
     private drawEntryMenuItem(): PopupMenu.PopupBaseMenuItem {
-        const menuItem = new PopupMenu.PopupBaseMenuItem()
+        const menuItem = new PopupMenu.PopupBaseMenuItem({ reactive: false })
 
         this.entry = new St.Entry({
             hint_text: 'Your current resin',
@@ -133,7 +141,7 @@ export default class ExampleExtension extends Extension {
         menuItem.add_child(this.entry)
 
         this.entry.get_text()
-
+        this.entry.set_width(200)
         this.entry.clutter_text.connect('activate', this.tryToSubmitResin.bind(this))
 
         return menuItem
@@ -153,9 +161,6 @@ export default class ExampleExtension extends Extension {
 
         this.resin = value
         this.redrawDisplayedResin()
-
-        notify(`Resin set to ${value}`)
-
         this.closePopup()
     }
 
