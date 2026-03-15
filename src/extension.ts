@@ -6,20 +6,27 @@ import Gio from 'gi://Gio'
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js'
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js'
 
 const APP_NAME = 'Genshin Resin Counter'
 const RESIN_EVERY_MIN = 8
 
+function notify(msg: string): void {
+    Main.notify(APP_NAME, msg)
+}
+
 export default class ExampleExtension extends Extension {
     private buttonText: St.Label | null = null
-    private indicator: PanelMenu.Button | null = null
+    private button: PanelMenu.Button | null = null
     private interval: GLib.Source | null = null
     private resin: number = 0
+    private popup: PopupMenu.PopupMenu | null = null
 
     public enable(): void {
-        this.indicator = this.createBtn()
+        this.button = this.drawButton()
+        this.popup = this.drawPopup()
 
-        this.updateBtnText()
+        this.redrawDisplayedResin()
 
         this.interval = setInterval(
             this.updateCounter.bind(this),
@@ -27,25 +34,25 @@ export default class ExampleExtension extends Extension {
             // RESIN_EVERY_MIN * 60 * 1000,
         )
 
-        Main.panel.addToStatusArea(this.uuid, this.indicator)
+        Main.panel.addToStatusArea(this.uuid, this.button)
     }
 
     public disable(): void {
-        this.indicator?.destroy()
+        this.button?.destroy()
         this.interval?.destroy()
 
-        this.indicator = null
+        this.button = null
         this.interval = null
         this.resin = 0
     }
 
     private updateCounter(): void {
         this.resin += 1
-        this.updateBtnText()
+        this.redrawDisplayedResin()
     }
 
-    private createBtn(): PanelMenu.Button {
-        const btn = new PanelMenu.Button(0.0, this.metadata.name, false)
+    private drawButton(): PanelMenu.Button {
+        const button = new PanelMenu.Button(0.0, this.metadata.name, true)
 
         this.buttonText = this.getNewButtonText()
 
@@ -54,9 +61,9 @@ export default class ExampleExtension extends Extension {
         box.add_child(this.getButtonIcon())
         box.add_child(this.buttonText)
 
-        btn.add_child(box)
+        button.add_child(box)
 
-        return btn
+        return button
     }
 
     private getButtonIcon(): St.Icon {
@@ -66,7 +73,7 @@ export default class ExampleExtension extends Extension {
         })
     }
 
-    private updateBtnText(): void {
+    private redrawDisplayedResin(): void {
         if (!this.buttonText) {
             this.buttonText = this.getNewButtonText()
         }
@@ -85,7 +92,19 @@ export default class ExampleExtension extends Extension {
         return buttonText
     }
 
-    private notify(msg: string): void {
-        Main.notify(APP_NAME, msg)
+    private drawPopup(): PopupMenu.PopupMenu {
+        if (!this.button) {
+            throw new Error('Cannot draw menu because button is null')
+        }
+
+        const popup = new PopupMenu.PopupMenu(this.button, 0.0, St.Side.TOP)
+
+        const section = new PopupMenu.PopupMenuSection()
+        section.addAction('Menu Item', () => notify('activated'))
+        popup.addMenuItem(section)
+
+        this.button.setMenu(popup)
+
+        return popup
     }
 }
