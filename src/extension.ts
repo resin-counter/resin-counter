@@ -6,7 +6,8 @@ import Gio from 'gi://Gio'
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js'
-import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js'
+
+import { Popup } from './popup.js'
 
 const APP_NAME = 'Genshin Resin Counter'
 const RESIN_EVERY_MIN = 8
@@ -17,7 +18,7 @@ function notify(msg: string): void {
 
 export default class ExampleExtension extends Extension {
     private resin: number = 0
-    private popup: PopupMenu.PopupMenu | null = null
+    private popup: Popup | null = null
 
     // Main button text where your resin and icon is displayed. We update
     // this field every x amount of minutes.
@@ -29,12 +30,9 @@ export default class ExampleExtension extends Extension {
     // Interval after which resin will be recalculated
     private interval: GLib.Source | null = null
 
-    // Entry (input) where you enter your resin amount in popup menu
-    private entry: St.Entry | null = null
-
     public enable(): void {
         this.button = this.drawButton()
-        this.popup = this.drawPopup()
+        this.popup = new Popup(this.button, this.tryToSubmitResin.bind(this))
 
         this.redrawDisplayedResin()
 
@@ -101,59 +99,7 @@ export default class ExampleExtension extends Extension {
         return buttonText
     }
 
-    private drawPopup(): PopupMenu.PopupMenu {
-        if (!this.button) {
-            throw new Error('Cannot draw menu because this.button is null')
-        }
-
-        const popup = new PopupMenu.PopupMenu(this.button, 0.5, St.Side.TOP)
-
-        popup.addMenuItem(this.drawLabelMenuItem())
-        popup.addMenuItem(this.drawEntryMenuItem())
-
-        this.button.setMenu(popup)
-
-        return popup
-    }
-
-    private drawLabelMenuItem(): PopupMenu.PopupBaseMenuItem {
-        const labelItem = new PopupMenu.PopupBaseMenuItem({ reactive: false })
-
-        labelItem.add_child(
-            new St.Label({
-                text: 'Enter your current resin\namount in the field below\nand press Enter.',
-                x_align: Clutter.ActorAlign.START,
-            }),
-        )
-
-        return labelItem
-    }
-
-    private drawEntryMenuItem(): PopupMenu.PopupBaseMenuItem {
-        const menuItem = new PopupMenu.PopupBaseMenuItem({ reactive: false })
-
-        this.entry = new St.Entry({
-            hint_text: 'Your current resin',
-            track_hover: false,
-            can_focus: true,
-        })
-
-        menuItem.add_child(this.entry)
-
-        this.entry.get_text()
-        this.entry.set_width(200)
-        this.entry.clutter_text.connect('activate', this.tryToSubmitResin.bind(this))
-
-        return menuItem
-    }
-
-    private tryToSubmitResin(): void {
-        if (!this.entry) {
-            throw new Error('Cannot try to submit resin because this.entry is null')
-        }
-
-        const value = parseInt(this.entry.get_text(), 10)
-
+    private tryToSubmitResin(value: number): void {
         if (isNaN(value) || value < 0 || value > 200) {
             notify('Please enter a number between 0 and 200')
             return
@@ -161,14 +107,7 @@ export default class ExampleExtension extends Extension {
 
         this.resin = value
         this.redrawDisplayedResin()
-        this.closePopup()
-    }
 
-    private closePopup(): void {
-        if (!this.popup) {
-            throw new Error('Cannot close popup this.popup is null')
-        }
-
-        this.popup.close()
+        this.popup!.close()
     }
 }
