@@ -94,10 +94,12 @@ export default class ExampleExtension extends Extension {
 
     private drawPopup(): PopupMenu.PopupMenu {
         if (!this.button) {
-            throw new Error('Cannot draw menu because button is null')
+            throw new Error('Cannot draw menu because this.button is null')
         }
 
-        const popup = new PopupMenu.PopupMenu(this.button, 0.0, St.Side.TOP)
+        const popup = new PopupMenu.PopupMenu(this.button, 0.5, St.Side.TOP)
+
+        popup.addMenuItem(this.getInput())
 
         const section = new PopupMenu.PopupMenuSection()
         section.addAction('Menu Item', () => notify('activated'))
@@ -106,5 +108,39 @@ export default class ExampleExtension extends Extension {
         this.button.setMenu(popup)
 
         return popup
+    }
+
+    private getInput(): PopupMenu.PopupBaseMenuItem {
+        const input = new PopupMenu.PopupBaseMenuItem()
+        const entry = new St.Entry({
+            hint_text: 'Enter resin (0-200)',
+            track_hover: true,
+            can_focus: true,
+        })
+
+        entry.set_width(200)
+        input.add_child(entry)
+
+        // Handle input changes
+        entry.clutter_text.connect('activate', () => {
+            if (!this.popup) {
+                throw new Error('Cannot get input because this.popup is null')
+            }
+
+            const value = parseInt(entry.get_text(), 10)
+
+            if (isNaN(value) || value < 0 || value > 200) {
+                notify('Please enter a number between 0 and 200')
+                return
+            }
+
+            this.resin = value
+            this.redrawDisplayedResin()
+            this.popup.close()
+
+            notify(`Resin set to ${value}`)
+        })
+
+        return input
     }
 }
