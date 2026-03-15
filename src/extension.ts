@@ -8,6 +8,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js'
 
 import { Popup } from './popup.js'
+import { Storage } from './storage.js'
 
 const APP_NAME = 'Genshin Resin Counter'
 const RESIN_EVERY_MIN = 8
@@ -18,7 +19,8 @@ function notify(msg: string): void {
 
 export default class ExampleExtension extends Extension {
     private resin: number = 0
-    private popup: Popup | null = null
+    private popup?: Popup
+    private storage?: Storage
 
     // Main button text where your resin and icon is displayed. We update
     // this field every x amount of minutes.
@@ -31,6 +33,7 @@ export default class ExampleExtension extends Extension {
     private interval: GLib.Source | null = null
 
     public enable(): void {
+        this.storage = new Storage()
         this.button = this.drawButton()
         this.popup = new Popup(this.button, this.tryToSubmitResin.bind(this))
 
@@ -55,6 +58,8 @@ export default class ExampleExtension extends Extension {
 
     private updateCounter(): void {
         this.resin += 1
+        this.storage!.saveResin(this.resin)
+
         this.redrawDisplayedResin()
     }
 
