@@ -33,7 +33,7 @@ export default class ExampleExtension extends Extension {
     private interval: GLib.Source | null = null
 
     public enable(): void {
-        this.storage = new Storage()
+        this.storage = new Storage(this.metadata.uuid)
         this.button = this.drawButton()
         this.popup = new Popup(this.button, this.tryToSubmitResin.bind(this))
 
@@ -58,8 +58,6 @@ export default class ExampleExtension extends Extension {
 
     private updateCounter(): void {
         this.resin += 1
-        this.storage!.saveResin(this.resin)
-
         this.redrawDisplayedResin()
     }
 
@@ -110,9 +108,13 @@ export default class ExampleExtension extends Extension {
             return
         }
 
+        this.storage!.saveAll({
+            lastResinAmount: value,
+            lastTimestamp: Date.now(),
+        })
+
         this.resin = value
         this.redrawDisplayedResin()
-
         this.popup!.close()
     }
 }

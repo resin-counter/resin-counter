@@ -1,4 +1,4 @@
 export type StorageSchema = {
-    resin: number
-    timestamp: number
+    lastResinAmount: number
+    lastTimestamp: number
 }
