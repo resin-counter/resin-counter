@@ -42,10 +42,7 @@ export default class ExampleExtension extends Extension {
 
         this.updateCounter()
 
-        this.interval = setInterval(
-            this.updateCounter.bind(this),
-            RESIN_EVERY_MIN * 60 * 1000,
-        )
+        this.interval = setInterval(this.updateCounter.bind(this), 1000 * 60)
 
         Main.panel.addToStatusArea(this.uuid, this.button)
     }
