@@ -1,0 +1,16 @@
+.grc-input__label {
+    font-size: 16px;
+}
+
+.grc-replunish__label {
+    display: block;
+    color: #d3bc8e;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.grc-replunish__timer {
+    display: block;
+    font-weight: bold;
+    font-size: 20px;
+}

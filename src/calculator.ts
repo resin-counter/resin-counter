@@ -1,10 +1,9 @@
+import { MAX_RESIN } from './extension.js'
+
 export class Calculator {
     public constructor(private resinEveryMin: number) { }
 
-    public calculateCurrentResin(
-        lastResinAmount: number,
-        lastTimestamp: number,
-    ): number {
+    public calculateCurrentResin(lastResinAmount: number, lastTimestamp: number): number {
         const timeDiff = Date.now() - lastTimestamp
 
         if (timeDiff < 0) {
@@ -14,6 +13,22 @@ export class Calculator {
         const resinToAdd = Math.floor(timeDiff / (this.resinEveryMin * 60 * 1000))
         const currentResin = lastResinAmount + resinToAdd
 
-        return currentResin > 200 ? 200 : currentResin
+        return currentResin > MAX_RESIN ? MAX_RESIN : currentResin
+    }
+
+    public calculateReplunishIn(resin: number): string {
+        let hours,
+            minutes,
+            seconds = 0
+
+        return `${hours}:${minutes}:${seconds}`
+    }
+
+    public calculateFullyReplunishIn(resin: number): string {
+        let hours,
+            minutes,
+            seconds = 0
+
+        return `${hours}:${minutes}:${seconds}`
     }
 }

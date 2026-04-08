@@ -11,8 +11,9 @@ import { Popup } from './popup.js'
 import { Storage } from './storage.js'
 import { Calculator } from './calculator.js'
 
-const APP_NAME = 'Genshin Resin Counter'
-const RESIN_EVERY_MIN = 8
+export const APP_NAME = 'Genshin Resin Counter'
+export const RESIN_EVERY_MIN = 8
+export const MAX_RESIN = 200
 
 function notify(msg: string): void {
     Main.notify(APP_NAME, msg)
@@ -38,7 +39,12 @@ export default class ExampleExtension extends Extension {
         this.calculator = new Calculator(RESIN_EVERY_MIN)
         this.storage = new Storage(this.metadata.uuid)
         this.button = this.drawButton()
-        this.popup = new Popup(this.button, this.tryToSubmitResin.bind(this))
+
+        this.popup = new Popup(
+            this.button,
+            this.tryToSubmitResin.bind(this),
+            this.calculator,
+        )
 
         this.updateCounter()
 
@@ -112,8 +118,8 @@ export default class ExampleExtension extends Extension {
     }
 
     private tryToSubmitResin(value: number): void {
-        if (isNaN(value) || value < 0 || value > 200) {
-            notify('Please enter a number between 0 and 200')
+        if (isNaN(value) || value < 0 || value > MAX_RESIN) {
+            notify(`Please enter a number between 0 and ${MAX_RESIN}`)
             return
         }
 
