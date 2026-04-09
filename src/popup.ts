@@ -4,8 +4,6 @@ import Clutter from 'gi://Clutter'
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js'
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js'
 
-import { Calculator } from './calculator.js'
-
 export class Popup {
     // Entry (input) where you enter your resin amount in popup menu
     private entry: St.Entry | null = null
@@ -15,7 +13,6 @@ export class Popup {
     public constructor(
         private button: PanelMenu.Button,
         private onInputSubmit: (value: number) => void,
-        private calculator: Calculator,
     ) {
         this.popup = this.draw()
     }
@@ -64,7 +61,7 @@ export class Popup {
 
         box.add_child(
             new St.Label({
-                text: this.calculator.calculateReplunishIn(),
+                text: '00:00:00',
                 x_align: Clutter.ActorAlign.START,
                 style_class: 'grc-replunish__timer',
             }),
@@ -89,7 +86,7 @@ export class Popup {
 
         box.add_child(
             new St.Label({
-                text: this.calculator.calculateFullyReplunishIn(),
+                text: '00:00:00',
                 x_align: Clutter.ActorAlign.START,
                 style_class: 'grc-replunish__timer',
             }),

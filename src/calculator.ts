@@ -15,20 +15,4 @@ export class Calculator {
 
         return currentResin > MAX_RESIN ? MAX_RESIN : currentResin
     }
-
-    public calculateReplunishIn(resin: number): string {
-        let hours,
-            minutes,
-            seconds = 0
-
-        return `${hours}:${minutes}:${seconds}`
-    }
-
-    public calculateFullyReplunishIn(resin: number): string {
-        let hours,
-            minutes,
-            seconds = 0
-
-        return `${hours}:${minutes}:${seconds}`
-    }
 }

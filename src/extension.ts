@@ -40,11 +40,7 @@ export default class ExampleExtension extends Extension {
         this.storage = new Storage(this.metadata.uuid)
         this.button = this.drawButton()
 
-        this.popup = new Popup(
-            this.button,
-            this.tryToSubmitResin.bind(this),
-            this.calculator,
-        )
+        this.popup = new Popup(this.button, this.tryToSubmitResin.bind(this))
 
         this.updateCounter()
 
