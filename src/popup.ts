@@ -30,7 +30,7 @@ export class Popup {
 
         this.nextReplenish = this.addCountdownItem(popup, 'Replenished in')
         this.fullReplenish = this.addCountdownItem(popup, 'Fully replenished in')
-        this.fullReplenishAt = this.addCountdownItem(popup, 'Replenishment ends at')
+        this.fullReplenishAt = this.addCountdownItem(popup, 'Replenishment ends')
 
         this.button.setMenu(popup)
 
@@ -108,17 +108,17 @@ export class Popup {
         const timeStr = `${hours}:${minutes}`
 
         if (targetDay.getTime() === today.getTime()) {
-            return `Today ${timeStr}`
+            return `Today at ${timeStr}`
         }
 
         if (targetDay.getTime() === tomorrow.getTime()) {
-            return `Tomorrow ${timeStr}`
+            return `Tomorrow at ${timeStr}`
         }
 
         const month = (targetDate.getMonth() + 1).toString().padStart(2, '0')
         const day = targetDate.getDate().toString().padStart(2, '0')
 
-        return `${month}/${day} ${timeStr}`
+        return `${month}/${day} at ${timeStr}`
     }
 
     private formatCountdown(timestampMs: number): string {
