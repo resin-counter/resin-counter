@@ -3,7 +3,7 @@ export type StorageSchema = {
     lastTimestamp: number
 }
 
-export type Replenish = {
+export type ReplenishTimestamps = {
     full: number
     next: number
 }

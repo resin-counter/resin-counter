@@ -1,3 +1,5 @@
+import type { ReplenishTimestamps } from './types.js'
+
 import St from 'gi://St'
 import Clutter from 'gi://Clutter'
 
@@ -32,6 +34,31 @@ export class Popup {
 
     public close(): void {
         this.popup.close()
+    }
+
+    public updateTimers(data: ReplenishTimestamps): void {
+        log(`DEBUG: full(${this.formatCountdown(data.full)})`)
+        log(`DEBUG: next(${this.formatCountdown(data.next)})`)
+    }
+
+    private formatCountdown(timestampMs: number): string {
+        const now = Date.now()
+        const diffMs = timestampMs - now
+
+        // If the timestamp is in the past, return "00:00:00"
+        if (diffMs <= 0) {
+            return '00:00:00'
+        }
+
+        const totalSeconds = Math.floor(diffMs / 1000)
+        const hours = Math.floor(totalSeconds / 3600)
+        const minutes = Math.floor((totalSeconds % 3600) / 60)
+        const seconds = totalSeconds % 60
+
+        // Pad with leading zeros
+        const pad = (num: number): string => num.toString().padStart(2, '0')
+
+        return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
     }
 
     private drawInputLabel(): PopupMenu.PopupBaseMenuItem {

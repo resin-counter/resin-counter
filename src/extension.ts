@@ -1,4 +1,4 @@
-import type { StorageSchema } from './types.js'
+import type { ReplenishTimestamps, StorageSchema } from './types.js'
 
 import St from 'gi://St'
 import Clutter from 'gi://Clutter'
@@ -17,8 +17,7 @@ export const APP_NAME = 'Genshin Resin Counter'
 //export const RESIN_EVERY_MIN = 8
 export const RESIN_EVERY_MIN = 1
 export const MAX_RESIN = 200
-//export const RESIN_INTERVAL_MS = 480000
-export const RESIN_INTERVAL_MS = 60000
+export const RESIN_INTERVAL_MS = RESIN_EVERY_MIN * 60 * 1000
 
 function notify(msg: string): void {
     Main.notify(APP_NAME, msg)
@@ -51,9 +50,12 @@ export default class ExampleExtension extends Extension {
         this.resin = this.calculateCurrentResin()
         this.redrawDisplayedResin()
 
-        this.interval = setInterval(this.updateResinNumber.bind(this), 1000)
-
         Main.panel.addToStatusArea(this.uuid, this.button)
+
+        this.interval = setInterval(() => {
+            this.updateResinNumber()
+            this.updateTimers()
+        }, 1000)
     }
 
     public disable(): void {
@@ -66,12 +68,6 @@ export default class ExampleExtension extends Extension {
     }
 
     private updateResinNumber(): void {
-        let diff = Date.now() - this.storageSchema!.lastTimestamp
-
-        if (diff < 0) {
-            diff = 0
-        }
-
         const newResin = this.calculateCurrentResin()
 
         if (newResin === this.resin) {
@@ -80,6 +76,34 @@ export default class ExampleExtension extends Extension {
 
         this.resin = newResin
         this.redrawDisplayedResin()
+    }
+
+    private updateTimers(): void {
+        const data: ReplenishTimestamps = { full: 0, next: 0 }
+
+        const now = Date.now()
+        const lastTimestamp = this.storageSchema!.lastTimestamp
+        const lastResinAmount = this.storageSchema!.lastResinAmount
+
+        const minutesPassed = (now - lastTimestamp) / (1000 * 60)
+        const resinGained = Math.floor(minutesPassed / RESIN_EVERY_MIN)
+        const currentResin = Math.min(lastResinAmount + resinGained, MAX_RESIN)
+
+        // If already capped, just update once and stop the interval
+        if (currentResin >= MAX_RESIN) {
+            data.full = 0
+            data.next = 0
+            this.popup!.updateTimers(data)
+            return
+        }
+
+        const lastIncrementTimestamp = lastTimestamp + resinGained * RESIN_INTERVAL_MS
+        data.next = lastIncrementTimestamp + RESIN_INTERVAL_MS
+
+        const resinNeeded = MAX_RESIN - currentResin
+        data.full = lastIncrementTimestamp + resinNeeded * RESIN_INTERVAL_MS
+
+        this.popup!.updateTimers(data)
     }
 
     private calculateCurrentResin(): number {
