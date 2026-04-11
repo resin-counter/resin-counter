@@ -1,7 +1,7 @@
 import { MAX_RESIN } from './extension.js'
 
 export class Calculator {
-    public constructor(private resinEveryMin: number) { }
+    public constructor(private resinEveryMin: number) {}
 
     public calculateCurrentResin(lastResinAmount: number, lastTimestamp: number): number {
         const timeDiff = Date.now() - lastTimestamp

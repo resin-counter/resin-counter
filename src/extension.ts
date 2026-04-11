@@ -1,3 +1,5 @@
+import type { StorageSchema } from './types.js'
+
 import St from 'gi://St'
 import Clutter from 'gi://Clutter'
 import GLib from 'gi://GLib'
@@ -12,8 +14,11 @@ import { Storage } from './storage.js'
 import { Calculator } from './calculator.js'
 
 export const APP_NAME = 'Genshin Resin Counter'
-export const RESIN_EVERY_MIN = 8
+//export const RESIN_EVERY_MIN = 8
+export const RESIN_EVERY_MIN = 1
 export const MAX_RESIN = 200
+//export const RESIN_INTERVAL_MS = 480000
+export const RESIN_INTERVAL_MS = 60000
 
 function notify(msg: string): void {
     Main.notify(APP_NAME, msg)
@@ -23,6 +28,7 @@ export default class ExampleExtension extends Extension {
     private resin: number = 0
     private popup?: Popup
     private storage?: Storage
+    private storageSchema?: StorageSchema
     private calculator?: Calculator
 
     // Main button text where your resin and icon is displayed. We update
@@ -39,12 +45,13 @@ export default class ExampleExtension extends Extension {
         this.calculator = new Calculator(RESIN_EVERY_MIN)
         this.storage = new Storage(this.metadata.uuid)
         this.button = this.drawButton()
-
+        this.storageSchema = this.storage!.getAll()
         this.popup = new Popup(this.button, this.tryToSubmitResin.bind(this))
 
-        this.updateCounter()
+        this.resin = this.calculateCurrentResin()
+        this.redrawDisplayedResin()
 
-        this.interval = setInterval(this.updateCounter.bind(this), 1000 * 60)
+        this.interval = setInterval(this.updateResinNumber.bind(this), 1000)
 
         Main.panel.addToStatusArea(this.uuid, this.button)
     }
@@ -58,18 +65,28 @@ export default class ExampleExtension extends Extension {
         this.resin = 0
     }
 
-    private recalculateCurrentResin(): void {
-        const data = this.storage!.getAll()
+    private updateResinNumber(): void {
+        let diff = Date.now() - this.storageSchema!.lastTimestamp
 
-        this.resin = this.calculator!.calculateCurrentResin(
-            data.lastResinAmount,
-            data.lastTimestamp,
-        )
+        if (diff < 0) {
+            diff = 0
+        }
+
+        const newResin = this.calculateCurrentResin()
+
+        if (newResin === this.resin) {
+            return
+        }
+
+        this.resin = newResin
+        this.redrawDisplayedResin()
     }
 
-    private updateCounter(): void {
-        this.recalculateCurrentResin()
-        this.redrawDisplayedResin()
+    private calculateCurrentResin(): number {
+        return this.calculator!.calculateCurrentResin(
+            this.storageSchema!.lastResinAmount,
+            this.storageSchema!.lastTimestamp,
+        )
     }
 
     private drawButton(): PanelMenu.Button {
