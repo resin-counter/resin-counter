@@ -142,6 +142,7 @@ export default class ExampleExtension extends Extension {
         })
 
         this.resin = value
+        this.storageSchema = this.storage!.getAll()
         this.redrawDisplayedResin()
         this.popup!.close()
     }
