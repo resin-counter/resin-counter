@@ -14,8 +14,7 @@ import { Storage } from './storage.js'
 import { Calculator } from './calculator.js'
 
 export const APP_NAME = 'Genshin Resin Counter'
-//export const RESIN_EVERY_MIN = 8
-export const RESIN_EVERY_MIN = 1
+export const RESIN_EVERY_MIN = 8
 export const MAX_RESIN = 200
 export const RESIN_INTERVAL_MS = RESIN_EVERY_MIN * 60 * 1000
 
@@ -32,13 +31,13 @@ export default class ExampleExtension extends Extension {
 
     // Main button text where your resin and icon is displayed. We update
     // this field every x amount of minutes.
-    private buttonText: St.Label | null = null
+    private buttonText?: St.Label
 
     // Main button with icon and resin counter in the top bar
-    private button: PanelMenu.Button | null = null
+    private button?: PanelMenu.Button
 
     // Interval after which resin will be recalculated
-    private interval: GLib.Source | null = null
+    private interval?: GLib.Source
 
     public enable(): void {
         this.calculator = new Calculator(RESIN_EVERY_MIN)
@@ -61,9 +60,10 @@ export default class ExampleExtension extends Extension {
     public disable(): void {
         this.button?.destroy()
         this.interval?.destroy()
+        this.popup?.destroy()
 
-        this.button = null
-        this.interval = null
+        this.button = undefined
+        this.interval = undefined
         this.resin = 0
     }
 

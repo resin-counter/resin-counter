@@ -8,7 +8,9 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js'
 
 export class Popup {
     // Entry (input) where you enter your resin amount in popup menu
-    private entry: St.Entry | null = null
+    private entry?: St.Entry
+    private fullReplenishText?: St.Label
+    private nextReplenishText?: St.Label
 
     private popup: PopupMenu.PopupMenu
 
@@ -24,7 +26,7 @@ export class Popup {
 
         popup.addMenuItem(this.drawInputLabel())
         popup.addMenuItem(this.drawInputEntry())
-        popup.addMenuItem(this.drawReplenished())
+        popup.addMenuItem(this.drawNextReplenished())
         popup.addMenuItem(this.drawFullyReplenished())
 
         this.button.setMenu(popup)
@@ -36,9 +38,18 @@ export class Popup {
         this.popup.close()
     }
 
+    public destroy(): void {
+        this.popup?.destroy()
+        this.entry?.destroy()
+    }
+
     public updateTimers(data: ReplenishTimestamps): void {
-        log(`DEBUG: full(${this.formatCountdown(data.full)})`)
-        log(`DEBUG: next(${this.formatCountdown(data.next)})`)
+        if (!this.nextReplenishText || !this.fullReplenishText) {
+            return
+        }
+
+        this.nextReplenishText.text = this.formatCountdown(data.next)
+        this.fullReplenishText.text = this.formatCountdown(data.full)
     }
 
     private formatCountdown(timestampMs: number): string {
@@ -75,7 +86,7 @@ export class Popup {
         return labelItem
     }
 
-    private drawReplenished(): PopupMenu.PopupBaseMenuItem {
+    private drawNextReplenished(): PopupMenu.PopupBaseMenuItem {
         const box = new St.BoxLayout({ vertical: true, reactive: false })
 
         box.add_child(
@@ -86,13 +97,13 @@ export class Popup {
             }),
         )
 
-        box.add_child(
-            new St.Label({
-                text: '00:00:00',
-                x_align: Clutter.ActorAlign.START,
-                style_class: 'grc-replunish__timer',
-            }),
-        )
+        this.nextReplenishText = new St.Label({
+            text: '00:00:00',
+            x_align: Clutter.ActorAlign.START,
+            style_class: 'grc-replunish__timer',
+        })
+
+        box.add_child(this.nextReplenishText)
 
         const menuItem = new PopupMenu.PopupBaseMenuItem({ reactive: false })
         menuItem.add_child(box)
@@ -111,13 +122,13 @@ export class Popup {
             }),
         )
 
-        box.add_child(
-            new St.Label({
-                text: '00:00:00',
-                x_align: Clutter.ActorAlign.START,
-                style_class: 'grc-replunish__timer',
-            }),
-        )
+        this.fullReplenishText = new St.Label({
+            text: '00:00:00',
+            x_align: Clutter.ActorAlign.START,
+            style_class: 'grc-replunish__timer',
+        })
+
+        box.add_child(this.fullReplenishText)
 
         const menuItem = new PopupMenu.PopupBaseMenuItem({ reactive: false })
         menuItem.add_child(box)
