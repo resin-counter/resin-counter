@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+npm run build
+
+zip -r genshin-resin-counter@resin-counter.github.io.zip * .[^.]* -x "src/*" ".git/*" ".vscode/*" "cmd/*" "node_modules/*" ".*" "*.zip" "tsconfig.json"
