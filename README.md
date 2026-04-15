@@ -1,14 +1,24 @@
 # Genshin Resin Counter
 
-GNOME shell extension for showing the current amount of resin from Genshin Impact with countdown timers similar to the ones in the game. Here is the way it works:
+GNOME Shell extension for tracking Genshin Impact resin with countdown timers.
 
-1. After playing the game, you enter your current resing. Let's say you have 10.
-2. Every 8 minutes, your resin will be incremented so that you can always see the actual amount.
-3. You can also see:
-    - 2 countdown timers, countdown to next resin and the countdown to the full resin replenishment
-    - The time at which you resin will be fully restored.
+## How it works
 
-- Offline. Doesn't do any requests.
-- Great performance. It accesses file storage only once when you log in into your GNOME shell.
+1. Enter your current resin amount after playing
+2. Extension automatically increments resin every 8 minutes (game's recharge rate)
+3. See two countdown timers:
+   - Time until next resin (+1)
+   - Time until full resin (200)
+4. View estimated time for full resin restoration
 
-[Github](https://github.com/resin-counter/resin-counter)
+## Features
+
+- ⏱️ Real-time countdown timers for resin replenishment
+- 💾 Offline operation - no external requests
+- ⚡ Efficient - reads storage only on login and manual updates
+- 🔢 Current resin display in top panel
+- ⚙️ Configurable refresh rates
+
+---
+
+[GitHub Repository](https://github.com/resin-counter/resin-counter)
