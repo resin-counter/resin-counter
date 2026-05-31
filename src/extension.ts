@@ -22,7 +22,7 @@ function notify(msg: string): void {
     Main.notify(APP_NAME, msg)
 }
 
-export default class ExampleExtension extends Extension {
+export default class ResinCounterExtension extends Extension {
     private resin: number = 0
     private popup?: Popup
     private storage?: Storage
