@@ -22,7 +22,7 @@ function notify(msg: string): void {
     Main.notify(APP_NAME, msg)
 }
 
-export default class ResinCounterExtension extends Extension {
+export default class GenshinResinCounterExtension extends Extension {
     private resin: number = 0
     private popup?: Popup
     private storage?: Storage

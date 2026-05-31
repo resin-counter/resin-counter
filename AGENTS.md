@@ -34,7 +34,7 @@ npm install
 
 ### Types & Naming
 - Use TypeScript strict mode - explicit types required
-- Classes: PascalCase (e.g., `ResinCounterExtension`)
+- Classes: PascalCase (e.g., `GenshinResinCounterExtension`)
 - Methods/properties: camelCase (e.g., `createBtn`, `buttonText`)
 - Private members: use `private` modifier or underscore prefix
 - Constants: UPPER_SNAKE_CASE for true constants
