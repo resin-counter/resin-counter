@@ -59,12 +59,15 @@ export default class ExampleExtension extends Extension {
 
     public disable(): void {
         this.button?.destroy()
-        this.interval?.destroy()
         this.popup?.destroy()
 
         this.button = undefined
         this.interval = undefined
         this.resin = 0
+
+        if (this.interval) {
+            clearInterval(this.interval)
+        }
     }
 
     private updateResinNumber(): void {
