@@ -13,7 +13,7 @@ export class Popup {
     private fullReplenishAt?: St.Label
     private nextReplenish?: St.Label
 
-    private popup: PopupMenu.PopupMenu
+    private popup?: PopupMenu.PopupMenu
 
     public constructor(
         private button: PanelMenu.Button,
@@ -38,12 +38,17 @@ export class Popup {
     }
 
     public close(): void {
-        this.popup.close()
+        this.popup?.close()
     }
 
     public destroy(): void {
         this.popup?.destroy()
         this.entry?.destroy()
+    }
+
+    public disable(): void {
+        this.popup = undefined
+        this.entry = undefined
     }
 
     public updateTimers(data: ReplenishTimestamps): void {

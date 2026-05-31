@@ -59,11 +59,17 @@ export default class ResinCounterExtension extends Extension {
 
     public disable(): void {
         this.button?.destroy()
+        this.popup?.disable()
         this.popup?.destroy()
 
+        this.resin = 0
         this.button = undefined
         this.interval = undefined
-        this.resin = 0
+        this.calculator = undefined
+        this.button = undefined
+        this.storage = undefined
+        this.storageSchema = undefined
+        this.popup = undefined
 
         if (this.interval) {
             clearInterval(this.interval)
