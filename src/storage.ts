@@ -33,17 +33,18 @@ export class Storage {
         )
     }
 
-    public getAll(): StorageSchema {
+    public async getAll(): Promise<StorageSchema> {
         const file = Gio.File.new_for_path(this.getFilePath())
 
         try {
-            const [success, contents] = file.load_contents(null)
-            const data = JSON.parse(new TextDecoder().decode(contents))
+            const [contents, _] = await file.load_contents_async(null)
 
-            if (!success) {
+            if (!contents) {
                 console.error('Getting data from storage is not successful')
                 return DEFAULT_SCHEMA
             }
+
+            const data = JSON.parse(new TextDecoder().decode(contents))
 
             return {
                 lastResinAmount: data.lastResinAmount,

@@ -39,11 +39,11 @@ export default class GenshinResinCounterExtension extends Extension {
     // Interval after which resin will be recalculated
     private interval?: GLib.Source
 
-    public enable(): void {
+    public async enable(): Promise<void> {
         this.calculator = new Calculator(RESIN_EVERY_MIN)
         this.storage = new Storage(this.metadata.uuid)
         this.button = this.drawButton()
-        this.storageSchema = this.storage!.getAll()
+        this.storageSchema = await this.storage!.getAll()
         this.popup = new Popup(this.button, this.tryToSubmitResin.bind(this))
 
         this.resin = this.calculateCurrentResin()
@@ -163,7 +163,7 @@ export default class GenshinResinCounterExtension extends Extension {
         return buttonText
     }
 
-    private tryToSubmitResin(value: number): void {
+    private async tryToSubmitResin(value: number): Promise<void> {
         if (isNaN(value) || value < 0 || value > MAX_RESIN) {
             notify(`Please enter a number between 0 and ${MAX_RESIN}`)
             return
@@ -175,7 +175,7 @@ export default class GenshinResinCounterExtension extends Extension {
         })
 
         this.resin = value
-        this.storageSchema = this.storage!.getAll()
+        this.storageSchema = await this.storage!.getAll()
         this.redrawDisplayedResin()
         this.popup!.close()
     }
