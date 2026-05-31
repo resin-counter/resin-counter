@@ -3,4 +3,6 @@ set -euo pipefail
 
 npm run build
 
+rm -f types.js genshin-resin-counter@resin-counter.github.io.zip
+
 zip -r genshin-resin-counter@resin-counter.github.io.zip * .[^.]* -x "src/*" ".git/*" ".vscode/*" "cmd/*" "node_modules/*" ".*" "*.zip" "tsconfig.json" "AGENTS.md" "Session.vim" "package.json" "package-lock.json"

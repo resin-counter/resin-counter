@@ -47,7 +47,7 @@ npm install
 - Clean up resources in `disable()`: destroy widgets, clear intervals/timeouts
 
 ### Error Handling
-- Use optional chaining (`?.`) for nullable objects
+
 - Type assertions with `@ts-ignore` only when necessary (document why)
 - Validate state before operations
 
