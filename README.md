@@ -18,7 +18,3 @@ GNOME Shell extension for tracking Genshin Impact resin with countdown timers.
 - ⚡ Efficient - reads storage only on login and manual updates
 - 🔢 Current resin display in top panel
 - ⚙️ Configurable refresh rates
-
----
-
-[GitHub Repository](https://github.com/resin-counter/resin-counter)
