@@ -13,8 +13,7 @@ GNOME Shell extension for tracking Genshin Impact resin with countdown timers.
 
 ## Features
 
-- ⏱️ Real-time countdown timers for resin replenishment
 - 💾 Offline operation - no external requests
 - ⚡ Efficient - reads storage only on login and manual updates
+- ⏱️ Real-time countdown timers for resin replenishment
 - 🔢 Current resin display in top panel
-- ⚙️ Configurable refresh rates
