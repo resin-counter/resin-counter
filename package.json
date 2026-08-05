@@ -6,14 +6,14 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/resin-counter/resin-counter.git"
+    "url": "git+https://codeberg.org/resin-counter/resin-counter.git"
   },
   "author": "Serhii Cho <serhiicho@protonmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/resin-counter/resin-counter/issues"
+    "url": "https://codeberg.org/resin-counter/resin-counter/issues"
   },
-  "homepage": "https://github.com/resin-counter/resin-counter#readme",
+  "homepage": "https://codeberg.org/resin-counter/resin-counter",
   "sideEffects": false,
   "scripts": {
     "build": "tsc"

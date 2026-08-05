@@ -6,7 +6,7 @@
     "donations": {
         "liberapay": "resin-counter"
     },
-    "version": 1.4,
-    "url": "https://github.com/resin-counter/resin-counter",
-    "version-name": "v1.4"
+    "version": 1.5,
+    "url": "https://codeberg.org/resin-counter/resin-counter",
+    "version-name": "v1.5"
 }
