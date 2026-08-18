@@ -2,11 +2,11 @@
     "uuid": "genshin-resin-counter@resin-counter.github.io",
     "name": "Genshin Resin Counter",
     "description": "GNOME Shell extension for tracking Genshin Impact resin with countdown timers",
-    "shell-version": ["49", "50"],
+    "shell-version": ["48", "49", "50"],
     "donations": {
         "liberapay": "resin-counter"
     },
-    "version": 1.5,
+    "version": 1.6,
     "url": "https://codeberg.org/resin-counter/resin-counter",
-    "version-name": "v1.5"
+    "version-name": "v1.6"
 }
