@@ -1,12 +1,12 @@
 {
     "uuid": "genshin-resin-counter@resin-counter.github.io",
     "name": "Genshin Resin Counter",
-    "description": "✏️ Description:\nGNOME Shell extension for tracking Genshin Impact resin with countdown timers.\n\n✨ Features:\n- Offline operation. No external requests\n- Efficient. Reads storage only on login and manual updates\n- Real-time countdown timers for resin replenishment\n- Current resin display in top panel\n\n🚀 How it works:\n1. Enter your current resin amount after playing\n2. Extension automatically increments resin every 8 minutes (game's recharge rate)\n3. See three countdown timers:\n  - Timer until next resin (+1)\n  - Timer until full resin (200)\n  - Clock time when replenishment ends\n4. View estimated time for full resin restoration in your top panel\n\n⭐ The best support is to give this project a star on Codeberg",
+    "description": "GNOME Shell extension for tracking Genshin Impact resin with countdown timers.\n\nFeatures:\n- Offline operation. No external requests\n- Efficient. Reads storage only on login and manual updates\n- Real-time countdown timers for resin replenishment\n- Current resin display in top panel\n\nHow it works:\n1. Enter your current resin amount after playing\n2. Extension automatically increments resin every 8 minutes (game's recharge rate)\n3. See three countdown timers:\n  - Timer until next resin (+1)\n  - Timer until full resin (200)\n  - Clock time when replenishment ends\n4. View estimated time for full resin restoration in your top panel\n\n⭐ The best support is to give this project a star on Codeberg",
     "shell-version": ["48", "49", "50"],
     "donations": {
         "custom": ["https://serhiicho.com/about-me"]
     },
-    "version": 1.7,
+    "version": 1.8,
     "url": "https://codeberg.org/resin-counter/resin-counter",
-    "version-name": "v1.7"
+    "version-name": "v1.8"
 }
