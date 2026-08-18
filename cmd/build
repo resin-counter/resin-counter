@@ -1,8 +1,23 @@
 #!/usr/bin/env bash
-set -euo pipefail
+
+source ./cmd/config
 
 npm run build
 
-rm -f types.js genshin-resin-counter@resin-counter.github.io.zip
+rm -f types.js "$ZIP_NAME"
 
-zip -r genshin-resin-counter@resin-counter.github.io.zip * .[^.]* -x "src/*" ".git/*" ".vscode/*" "cmd/*" "node_modules/*" ".*" "*.zip" "tsconfig.json" "AGENTS.md" "Session.vim" "package.json" "package-lock.json"
+files_exclude=(
+    "src/*"
+    ".git/*"
+    ".vscode/*"
+    "cmd/*"
+    "node_modules/*"
+    ".*" "*.zip"
+    "tsconfig.json"
+    "AGENTS.md"
+    "Session.vim"
+    "package.json"
+    "package-lock.json"
+)
+
+zip -r "$ZIP_NAME" ./* .[^.]* -x "${files_exclude[@]}"
