@@ -15,3 +15,5 @@ fi
 ./cmd/build
 
 unzip "$ZIP_NAME" -d "$DIR_PATH"
+
+echo 'Re-login to your shell to see extension changes!'
