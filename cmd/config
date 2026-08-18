@@ -1,1 +1,12 @@
-ZIP_NAME="genshin-resin-counter@resin-counter.github.io.zip"
+#!/usr/bin/env bash
+
+# UUID of the extension
+EXT_UUID="$(cat metadata.json | jq -r '.uuid')"
+
+# The name of the zip archive
+ZIP_NAME="${EXT_UUID}.zip"
+
+# Don't put trailing slash
+GNOME_EXT_PATH="${HOME}/.local/share/gnome-shell/extensions"
+
+DIR_PATH="$GNOME_EXT_PATH/$EXT_UUID"

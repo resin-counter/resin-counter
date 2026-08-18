@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+source ./cmd/config
+
+if [[ ! -d "$DIR_PATH" ]]; then
+    echo 'Directory does not exist'
+    exit 1
+fi
+
+rm -r "$DIR_PATH"
+echo "Directory deleted: $DIR_PATH"

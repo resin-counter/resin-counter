@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+source ./cmd/config
+
+if [[ -d "$DIR_PATH" ]]; then
+    read -rp "Directory $DIR_PATH already exists. Do you want to delete it? Y/n " should_delete
+
+    if [[ "$should_delete" == "n" ]]; then
+        exit 1
+    fi
+
+    rm -r "$DIR_PATH"
+fi
+
+./cmd/build
+
+unzip "$ZIP_NAME" -d "$DIR_PATH"
