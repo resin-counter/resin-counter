@@ -1,5 +1,9 @@
 # Release Notes
 
+## [1.7] - 2026-08-18
+
+- Added more information to extension description meta.
+
 ## [1.6] - 2026-08-18
 
 - After testing, added support for GNOME 48.
