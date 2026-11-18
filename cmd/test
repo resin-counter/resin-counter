@@ -16,4 +16,4 @@ fi
 
 unzip "$ZIP_NAME" -d "$DIR_PATH"
 
-echo 'Re-login to your shell to see extension changes!'
+echo 'Re-login to your shell to see extension changes or run: dbus-run-session -- gnome-shell --devkit --wayland'
