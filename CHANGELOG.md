@@ -1,7 +1,8 @@
 # Release Notes
 
-## [1.9] - 2026-08-18
+## [1.9] - 2026-11-18
 - Changed Codeberg references to GitHub after moving the project.
+- Fixed the one-second timer not being destroyed when the extension is disabled, which leaked timers and threw errors on every lock/unlock cycle.
 
 ## [1.8] - 2026-08-18
 - Remove a couple of emojis because some people think that it's AI-generated, which is funny. I kept the star emoji because I like it

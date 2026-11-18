@@ -62,18 +62,15 @@ export default class GenshinResinCounterExtension extends Extension {
         this.popup?.disable()
         this.popup?.destroy()
 
+        this.interval?.destroy()
+
         this.resin = 0
         this.button = undefined
         this.interval = undefined
         this.calculator = undefined
-        this.button = undefined
         this.storage = undefined
         this.storageSchema = undefined
         this.popup = undefined
-
-        if (this.interval) {
-            clearInterval(this.interval)
-        }
     }
 
     private updateResinNumber(): void {
