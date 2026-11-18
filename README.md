@@ -2,7 +2,7 @@
 
 GNOME Shell extension for tracking Genshin Impact resin with countdown timers.
 
-The best support is to give this project a star on Codeberg.
+The best support is to give this project a star on GitHub.
 
 ## How it works
 
